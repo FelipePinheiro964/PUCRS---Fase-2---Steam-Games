@@ -1,4 +1,4 @@
-
+import sys
 import pandas as pd
 
 #seleção de arquivo
@@ -6,8 +6,8 @@ f = input('Digite o nome do arquivo: ')
 
 #finalização forçada
 if str.lower(f) == 'sair':
-  SystemExit
   print('Saindo...')
+  sys.exit()
 else:
   tabela = pd.read_csv(f, sep=",")
   if tabela.empty:
@@ -15,7 +15,8 @@ else:
 
 match input('Digite o número da questão: '):
   case '0':
-    SystemExit
+    print('Saindo...')
+    sys.exit()
   case '1':
     try: 
       questao_1 = tabela[['Name', 'Metacritic score', 'Release date']]
