@@ -25,9 +25,9 @@ match input('Digite o número da questão: '): #seleção da função desejada
   ###########################
   ######## QUESTÕES ########
   ###########################
- 
+
   ## -- QUESTÃO 1
-  case '1': 
+  case '1':
 
     try:
       questao_1 = tabela[['Name', 'Metacritic score', 'Release date']]
@@ -47,7 +47,7 @@ match input('Digite o número da questão: '): #seleção da função desejada
 
   ## -- QUESTÃO 2
   case '2':
-        #try:
+ 
           tabela_copy = tabela.copy() # Para nao perder dados, cria uma copia da tabela
           mask = tabela_copy['Genres'].str.contains('RPG', case=False, na=False) # Procura todos os generos RPG
           RPG = tabela_copy[mask] # Cria uma variavel RPG para facilitar leitura
@@ -82,10 +82,25 @@ match input('Digite o número da questão: '): #seleção da função desejada
           media_negativas = RPG['Negative'].mean()
           print(f'Em media, temos {media_negativas:.2f} avalições negativas para esta categoria!')
 
-          #############################
-          #screenshots e filmes a ver##
-          #############################
+          # Procuro por links (como mostra nos dados de cada coluna)
+          def contar_links(celula):
+            if pd.isnull(celula):
+              return 0
+            return celula.count('https') + celula.count('http')
 
+          RPG['contador_Screenshots'] = RPG['Screenshots'].apply(contar_links)
+          RPG['contador_Movies'] = RPG['Movies'].apply(contar_links)
+          RPG['Total_links'] = RPG['contador_Screenshots'] + RPG['contador_Movies']
+          print()
+
+          # Calculo a media e maxima a partir da nova coluna
+          max_midia = RPG['Total_links'].sum()
+          media_total_links = RPG['Total_links'].mean()
+          print(f'Para finalizar, temoos {max_midia:.0f} midias presentes!')
+          print(f'Isto é em media {media_total_links:.2f} links!!')
+
+
+  
   ## -- QUESTÃO 3
   case '3':
 
@@ -97,7 +112,7 @@ match input('Digite o número da questão: '): #seleção da função desejada
     top5_empresas_index = empresas.head(5).index
 
     top5_empresas_pagos = tabela_copy[
-        (tabela_copy['Publishers'].isin(top5_empresas_index)) & 
+        (tabela_copy['Publishers'].isin(top5_empresas_index)) &
         (tabela_copy['Price'] > 0) #quebra de linhas para facilitar leitura
     ]
 
